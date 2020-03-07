@@ -6,6 +6,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, Details
 
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -13,7 +14,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
-        print(user)
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password")
             return redirect(url_for('login'))
@@ -28,6 +28,8 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     return render_template('dashboard.html')
 
 
@@ -39,10 +41,20 @@ def logout():
 
 @app.route('/update_skill', methods=['GET', 'POST'])
 def update_skill():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     if request.method == 'POST':
-        o=request.get_data()
-        loc = request.form['rating']
-        print(loc)
+        data = dict(request.form)
+        x = int((len(data)-2)/3)
+        print(data,x)
+        for i in range(1, x+1):
+            s = Skills(employee_id=current_user.emp_id, skill=data['skills'+str(i)], skill_exp=data['experience'+str(i)],emp_rating=data['rating'+str(i)])
+            db.session.add(s)
+            db.session.commit()
+        u = Users.query.filter_by(emp_id=current_user.emp_id).first()
+        u.practice = data['practice']
+        u.location = data['location']
+        db.session.commit()
         return redirect('dashboard')
     return render_template('update_skill.html', title='Update Skill')
 

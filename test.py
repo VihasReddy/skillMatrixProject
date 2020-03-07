@@ -23,9 +23,7 @@ db.session.commit()
 for i in skills:
     print(i)
 
-r = db.engine.execute('select * from Users where id IN (select emp_id from Skills where experience >= 3)').fetchall()
-x = db.engine.execute('select username from Users where exp > 2').fetchall()
-y = db.engine.execute('select username from Users where exp > 2').fetchall()
+r = db.engine.execute('select * from Users where emp_id IN (select employee_id from Skills where skill_exp >= 3)').fetchall()
+x = db.engine.execute('select username from Users where overall_exp > 2').fetchall()
 print(r)
 print(x)
-print(y[0][0])

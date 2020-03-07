@@ -12,8 +12,17 @@
             {
                 var newcell = row.insertCell(i);
                 newcell.innerHTML = table.rows[1].cells[i].innerHTML;
+                if(i==0){
+                    newcell.children[0].setAttribute("name","skills"+rowCount)
+                    }
+                else if(i==1){
+                    newcell.children[0].setAttribute("name","experience"+rowCount)
+                    }
+                else{
+                    newcell.children[0].setAttribute("name","rating"+rowCount)
+                    }
+                console.log(newcell.children[0])
             }
-
         }
     </script>
     <form action="" method="post" id="form" class="container-fluid">
@@ -28,7 +37,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <select class='select' id="skills" name="skills">
+                        <select class='select' id="skills" name="skills1">
                             <option value="Java">Java</option>
                             <option value="Python">Python</option>
                             <option value="Scala">Scala</option>
@@ -37,10 +46,10 @@
                         </select>
                     </td>
                     <td>
-                        <input type="text" id="experience" name="experience">
+                        <input type="text" id="experience" name="experience1">
                     </td>
                     <td>
-                        <select class='select' id="rating" name="rating">
+                        <select class='select' id="rating" name="rating1">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
