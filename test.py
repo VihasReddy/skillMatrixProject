@@ -37,6 +37,10 @@ e = db.engine.execute('insert into Skills (emp_id,skill,experience,emp_rating) v
 db.session.commit()
 """
 
+s = Skills.query.filter_by(skill_id=7).first()
+s.set_manager_rating(2)
+db.session.commit()
+
 skills = Skills.query.all()
 
 for i in skills:
@@ -50,6 +54,14 @@ x = db.engine.execute('select username from Users where overall_exp > '+str(2)).
 
 q = Skills.query.filter_by(manager_rating=None).join(Users).filter_by(manager_id=current_user.emp_id).all()
 
+s = Skills.query.filter(Skills.skill_exp == 'Java')
+
+z = db.session.query(Skills.employee_id).filter(Skills.skill == 'Java', Skills.skill_exp >= 2, (Skills.emp_rating + Skills.manager_rating)/2 >= 3).all()
+
+for res in z[0]:
+    print(res)
+
+print(q[0].employee_id)
 
 for res in q:
     print("Update {} for {} skill ".format(res.employee_id, res.skill))

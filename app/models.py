@@ -37,5 +37,8 @@ class Skills(db.Model):
     emp_rating = db.Column(db.Integer, index=True)
     manager_rating = db.Column(db.Integer, index=True)
 
+    def set_manager_rating(self, rating):
+        self.manager_rating = rating
+
     def __repr__(self):
-        return '<skill_id : {}><Employee ID : {}><skill : {}>'.format(self.skill_id, self.employee_id, self.skill)
+        return '<skill_id : {}><Employee ID : {}><skill : {}><exp : {}><emp_rating : {}><manager_rating : {}>'.format(self.skill_id, self.employee_id, self.skill,self.skill_exp,self.emp_rating,self.manager_rating)

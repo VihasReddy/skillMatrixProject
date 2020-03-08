@@ -61,4 +61,26 @@ def update_skill():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        data = dict(request.form)
+        x = int(len(data)/3)
+        print(data,x)
+        z = []
+        p = []
+        for i in range(1, x+1):
+            t = db.session.query(Skills.employee_id).filter(Skills.skill == data['skills'+str(i)], Skills.skill_exp >= data['experience'+str(i)],
+                                    (Skills.emp_rating + Skills.manager_rating)/2 >= int(data['rating'+str(i)])).all()
+            z.append(t)
+        print("query: ", z)
+        for i in range(len(z)-1):
+            if i == 0:
+                p = list(set(z[i]) & set(z[i+1]))
+            else:
+                p = list(set(p) & set(z[i+1]))
+        res = []
+        for t in p[0]:
+            res.append(Users.query.filter_by(emp_id=t).first())
+        print("search result: ", res)
     return render_template('search.html', title='Search')
